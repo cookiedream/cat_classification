@@ -5,6 +5,9 @@ from torch.utils.data import Dataset, DataLoader, random_split
 from PIL import Image
 import yaml
 import random
+import matplotlib.pyplot as plt
+import numpy as np
+import torchvision
 
 random.seed(42)
 
@@ -64,8 +67,12 @@ class CatsDataset(Dataset):
 
 # 資料轉換，可以根據需求自定義
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
+    transforms.Resize(256),
+    transforms.ColorJitter(),
+    transforms.RandomCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.Resize(128),
+    transforms.ToTensor()
 ])
 
 # 創建 Dataset
@@ -89,3 +96,12 @@ train_loader = DataLoader(
     train_dataset, batch_size=config["TRAINING"]["BATCH_SIZE"], shuffle=config["TRAINING"]["SHUFFLE"])
 val_loader = DataLoader(
     val_dataset, batch_size=config["TRAINING"]["BATCH_SIZE"], shuffle=config["TRAINING"]["SHUFFLE"])
+
+
+# samples, labels = next(iter(train_loader))
+# plt.figure(figsize=(16, 24))
+# grid_imgs = torchvision.utils.make_grid(samples[:24])
+# np_grid_imgs = grid_imgs.numpy()
+# # in tensor, image is (batch, width, height), so you have to transpose it to (width, height, batch) in numpy to show it.
+# plt.imshow(np.transpose(np_grid_imgs, (1, 2, 0)))
+# plt.savefig('./fig/fig.png')

@@ -19,7 +19,7 @@ model = model_class(
 
 # Define loss function and optimizer
 loss_name = config['TRAINING']['LOSS']
-if loss_name == 'CrossEntropyLoss ':
+if loss_name == 'CrossEntropyLoss':
     criterion = nn.CrossEntropyLoss()
 elif loss_name == 'MSELoss':
     criterion = nn.MSELoss()
