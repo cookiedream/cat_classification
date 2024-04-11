@@ -20,7 +20,7 @@ class CatsDataset(Dataset):
         self.classes = os.listdir(data_dir)
         self.classes.sort()
         self.images = []
-        self.labels = []
+        self.labels = []  # 123
 
         total_images_count = 0  # 總圖片數量計數器
 
