@@ -36,6 +36,7 @@ for epoch in range(config['TRAINING']['EPOCHS']):
     total = 0
 
     for images, labels in train_loader:
+        images, labels = images.to(device), labels.to(device)
         # Forward pass
         outputs = model(images)
         loss = criterion(outputs, labels)
@@ -61,6 +62,8 @@ for epoch in range(config['TRAINING']['EPOCHS']):
 
     with torch.no_grad():
         for val_images, val_labels in val_loader:
+            val_images, val_labels = val_images.to(
+                device), val_labels.to(device)
             val_outputs = model(val_images)
             val_loss += criterion(val_outputs, val_labels).item()
 
