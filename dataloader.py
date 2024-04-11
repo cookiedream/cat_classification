@@ -1,8 +1,16 @@
 import os
 import torch
 from torchvision import transforms
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, random_split
 from PIL import Image
+import yaml
+import random
+
+random.seed(42)
+
+
+with open('train.yaml', 'r', encoding='utf-8') as f:
+    config = yaml.safe_load(f)
 
 
 class CatsDataset(Dataset):
@@ -34,11 +42,11 @@ class CatsDataset(Dataset):
             self.labels.extend([idx] * images_count)
 
             # 打印當前品種和其圖片數量
-            print(f"{breed}: {images_count} 張圖片")
+            # print(f"{breed}: {images_count} 張圖片")
 
-        print(f"Total {len(self.classes)} classes")  # 打印品種總數和部分品種名稱
-        print("breed", self.classes[:20])  # 僅打印前五個品種名稱作為示例
-        print(f"Total {len(self.images)} img")  # 打印圖片總數
+        # print(f"Total {len(self.classes)} classes")  # 打印品種總數和部分品種名稱
+        # print("breed", self.classes[:20])  # 僅打印前五個品種名稱作為示例
+        # print(f"Total {len(self.images)} img")  # 打印圖片總數
 
     def __len__(self):
         return len(self.images)
@@ -64,5 +72,20 @@ transform = transforms.Compose([
 data_dir = 'data'  # 這裡填入你的資料夾根路徑
 cats_dataset = CatsDataset(data_dir=data_dir, transform=transform)
 
+# 切分訓練和驗證資料
+dataset_size = len(cats_dataset)
+train_size = dataset_size
+# 計算驗證集的大小
+val_size = int(dataset_size * config["TRAINING"]["VAL_RATIO"])
+# 計算訓練集的大小
+train_size = dataset_size - val_size
+
+# 使用計算出的大小分割數據集
+train_dataset, val_dataset = random_split(cats_dataset, [train_size, val_size])
+
+
 # 創建 DataLoader
-data_loader = DataLoader(cats_dataset, batch_size=32, shuffle=True)
+train_loader = DataLoader(
+    train_dataset, batch_size=config["TRAINING"]["BATCH_SIZE"], shuffle=config["TRAINING"]["SHUFFLE"])
+val_loader = DataLoader(
+    val_dataset, batch_size=config["TRAINING"]["BATCH_SIZE"], shuffle=config["TRAINING"]["SHUFFLE"])
