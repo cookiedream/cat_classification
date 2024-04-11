@@ -31,3 +31,20 @@ git clone https://github.com/cookiedream/cat_classification.git
 	├── api.py
 	└── requirements.txt
     ```
+
+## 使用git上傳請注意
+```
+## git command line ( if you open the project first time) ##
+step 1:
+	git checkout Wu / Chen (choose whos branch you want to checkout)
+step 2:
+	git merge main (merge the main branch to your branch)
+
+## git if you want to push your code ##
+step 1:
+	git add .
+step 2:
+	git commit -m "What you want to say"
+step 3:
+	git push
+```
