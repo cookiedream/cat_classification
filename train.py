@@ -19,7 +19,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 model = model_class(n_class=config['TRAINING']['N_CLASS']).to(device)
 
 
-summary(model, input_size=(3, 224, 224))  # 以您模型的輸入大小替換 (3, 224, 224)
+summary(model, input_size=(3, 128, 128))  # 以您模型的輸入大小替換 (3, 224, 224)
 
 loss_name = config['TRAINING']['LOSS']
 if loss_name == 'CrossEntropyLoss':
