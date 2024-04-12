@@ -12,6 +12,8 @@ from torchsummary import summary
 with open('train.yaml', 'r', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
+
+name = config['TRAINING']['MODEL']
 model_class = model_dict[config['TRAINING']['MODEL']]
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 model = model_class(n_class=config['TRAINING']['N_CLASS']).to(device)
@@ -31,7 +33,7 @@ optimizer = optim.SGD(model.parameters(),
                       lr=config['TRAINING']['LEARNING_RATE'])
 
 # Initialize TensorBoard
-writer = SummaryWriter()
+writer = SummaryWriter(f'runs/{name}')
 
 best_val_acc = 0.0
 if not os.path.exists('weights'):
@@ -65,8 +67,6 @@ for epoch in range(config['TRAINING']['EPOCHS']):
 
     train_acc = 100 * correct / total
     train_loss = running_loss / len(train_loader)
-    writer.add_scalar('Loss/Train', train_loss, epoch)
-    writer.add_scalar('Accuracy/Train', train_acc, epoch)
 
     model.eval()
     val_bar = tqdm(val_loader, desc=f"Epoch {epoch+1}/{config['TRAINING']['EPOCHS']} Validating",
@@ -87,15 +87,18 @@ for epoch in range(config['TRAINING']['EPOCHS']):
 
     val_acc = 100 * val_correct / val_total
     val_loss /= len(val_loader)
-    writer.add_scalar('Loss/Val', val_loss, epoch)
-    writer.add_scalar('Accuracy/Val', val_acc, epoch)
+
+    writer.add_scalars(
+        'Accuracy', {'Train': train_acc, 'Test': val_acc}, epoch+1)
+    writer.add_scalars(
+        'Loss', {'Train': train_loss, 'Test': val_loss}, epoch+1)
 
     print(f"Epoch {epoch+1} Completed: Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.2f}% | Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.2f}%")
 
     if not os.path.exists('weights'):
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), f'weights/{model}_best_weights.pt')
+            torch.save(model.state_dict(), f'weights/{name}_best_weights.pt')
             print("Saved new best weights.")
 
 writer.close()
