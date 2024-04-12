@@ -1,7 +1,7 @@
 # config['TRAINING']['']
 TRAINING:
   BATCH_SIZE: 32
-  EPOCHS: 1000
+  EPOCHS: 100
   LEARNING_RATE: 0.001
   LOSS: 'CrossEntropyLoss'
   OPTIMIZER: "adam"
@@ -9,4 +9,4 @@ TRAINING:
   VAL_RATIO: 0.2 # 20% of the data will be used for validation
   LEARNING_RATE: 0.001
   N_CLASS: 20  # 假設你的config文件中有這個設定
-  MODEL: 'CatClassificationModel' # CatClassificationModel
+  MODEL: 'VGG16' # CatClassificationModel,VGG16,ResNet50
