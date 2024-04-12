@@ -8,6 +8,8 @@ PyYAML
 matplotlib
 rich
 tqdm
+tensorboard==2.10.0
+torchsummary
 # --------------------------------------
 # git command line ( if you open the project first time)
 # step 1: git checkout Wu / Chen (choose whos branch you want to checkout)
