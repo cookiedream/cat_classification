@@ -14,6 +14,16 @@ git clone https://github.com/cookiedream/cat_classification.git
 ## 需要調整參數
 可以去 `train.yaml` 裡面去調整
 
+## 如何開啟 `tensorboard` 查看訓練圖
+### 請在 `cmd` 中路徑指向 `run` 這個資料夾
+	cd ./runs
+ ### 接下來在 `cmd` 中執行
+	tensorboard --logdir==<model_name>
+ ### 會看到以下圖片
+ ![image](https://github.com/cookieyu2000/cat_classification/assets/105692097/604a79fc-1649-4b3d-b841-698995dad260)
+ 
+請複製反灰連結至瀏覽器中
+
 
 ## 程式架構
     ```
